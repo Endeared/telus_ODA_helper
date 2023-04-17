@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Counter</title>
+</head>
+
+<style>
+    #buttons {
+        display: flex;
+        justify-content: center;
+        margin: 20px;
+    }
+
+    .appendToMe {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 50px;
+    }
+
+    #appendToMe {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 10px;
+    }
+
+    #newChild {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        margin: 10px;
+        gap: 5px;
+    }
+
+    #inputParent {
+        display: flex;
+        justify-content: center;
+    }
+
+
+</style>
+<body>
+
+    <div id="buttons">
+        <button id="add">Add Item</button>
+    </div>
+
+    <div id="inputParent">
+    </div>
+
+    <div id='appendToMe'>
+    </div>
+    
+</body>
+
+<script>
+    let add = document.getElementById('add')
+
+    function addItem() {
+        let initialButton = document.getElementById('add')
+        initialButton.remove()
+        let inputParent = document.getElementById('inputParent')
+        let inputName = document.createElement('input')
+        inputName.id = 'input'
+        inputName.innterHTML = 'Input an item name!'
+        inputName.addEventListener('keypress', function (press) {
+            if (press.key === 'Enter') {
+                let value = inputName.value
+                inputName.remove()
+                let parent = document.getElementById('appendToMe')
+                let newChild = document.createElement('div')
+                newChild.id = 'newChild'
+                let itemName = document.createElement('div')
+                itemName.innerHTML = value
+                let itemCount = document.createElement('div')
+                itemCount.innerHTML = 0
+                let add = document.createElement('button')
+                add.innerHTML = '+'
+                add.addEventListener('click', function (add) {
+                    itemCount.innerHTML = (Number(itemCount.innerHTML) + 1)
+                })
+                let subtract = document.createElement('button')
+                subtract.innerHTML = '-'
+                subtract.addEventListener('click', function (subtract) {
+                    itemCount.innerHTML = (Number(itemCount.innerHTML) - 1)
+                })
+                newChild.append(itemName)
+                newChild.append(itemCount)
+                newChild.append(add)
+                newChild.append(subtract)
+                parent.append(newChild)
+                let buttonsPar = document.getElementById('buttons')
+                let itemAdd = document.createElement('button')
+                itemAdd.innerHTML = 'Add Item'
+                itemAdd.id = 'add'
+                itemAdd.addEventListener('click', addItem)
+                buttonsPar.append(itemAdd)
+            }
+        })
+        inputParent.append(inputName)
+    }
+
+    add.addEventListener('click', addItem);
+</script>
+
+</html>
