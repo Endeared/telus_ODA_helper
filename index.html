@@ -8,6 +8,11 @@
 </head>
 
 <style>
+    body {
+        background-color: rgb(28, 30, 36);
+        color: white;
+    }
+
     #buttons {
         display: flex;
         justify-content: center;
@@ -44,6 +49,23 @@
         justify-content: center;
     }
 
+    button {
+        background-color: rgb(28, 30, 36);
+        color: white;
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    #sessionInfo {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-top: 50px;
+    }
 
 </style>
 <body>
@@ -57,51 +79,92 @@
 
     <div id='appendToMe'>
     </div>
+
+    <div id='sessionInfo'>
+        <div id="time"></div>
+        <div id="cash"></div>
+    </div>
     
 </body>
 
 <script>
     let add = document.getElementById('add')
 
+    let sessionInfo = []
+
     function addItem() {
+        let buttonsDiv = document.getElementById('buttons')
         let initialButton = document.getElementById('add')
         initialButton.remove()
+        buttonsDiv.innerHTML = 'Input an item name.'
         let inputParent = document.getElementById('inputParent')
         let inputName = document.createElement('input')
+        let value1
+        let value2
         inputName.id = 'input'
-        inputName.innterHTML = 'Input an item name!'
         inputName.addEventListener('keypress', function (press) {
             if (press.key === 'Enter') {
-                let value = inputName.value
+                value1 = inputName.value
+                let newInput = document.createElement('input')
+                newInput.id = 'input'
+                newInput.addEventListener('keypress', function (press) {
+                    if (press.key === 'Enter') {
+                        value2 = newInput.value
+                        let parent = document.getElementById('appendToMe')
+                        let newChild = document.createElement('div')
+                        newChild.id = 'newChild'
+                        let itemName = document.createElement('div')
+                        itemName.innerHTML = value1
+                        let itemCount = document.createElement('div')
+                        itemCount.innerHTML = 0
+                        let add = document.createElement('button')
+                        add.innerHTML = '+'
+                        add.addEventListener('click', function (add) {
+                            itemCount.innerHTML = (Number(itemCount.innerHTML) + 1)
+                            if (sessionInfo.indexOf(value1) == -1) {
+                                value1 = {
+                                    'count': Number(itemCount.innerHTML),
+                                    'seconds': Number(value2)
+                                }
+                                sessionInfo.push(value1)
+                            } else if (sessionInfo.indexOf(value1) != -1) {
+                                sessionInfo[sessionInfo.indexOf(value1)]['count'] = Number(itemCount.innerHTML)
+                            }
+                            let timeDiv = document.getElementById('time')
+                            let cashDiv = document.getElementById('cash')
+                            let seconds = 0
+                            let minutes = 0
+                            let cash = 0
+                            for (let i = 0; i < sessionInfo.length; i++) {
+                                let thisTask = sessionInfo[i]
+                                console.log(thisTask)
+                                seconds += (thisTask['seconds'] * thisTask['count'])
+                                minutes = (seconds / 60).toFixed(2)
+                                cash = (seconds / 300).toFixed(2)
+                            }
+                            timeDiv.innerHTML = `You have worked for ${seconds} seconds / ${minutes} minutes.`
+                            cashDiv.innerHTML = `Your current earnings for this session is $${cash} USD.`
+                        })
+                        let subtract = document.createElement('button')
+                        subtract.innerHTML = '-'
+                        subtract.addEventListener('click', function (subtract) {
+                            itemCount.innerHTML = (Number(itemCount.innerHTML) - 1)
+                        })
+                        newChild.append(itemName, itemCount, add, subtract)
+                        parent.append(newChild)
+                        newInput.remove()
+                        let buttonsPar = document.getElementById('buttons')
+                        let itemAdd = document.createElement('button')
+                        itemAdd.innerHTML = 'Add Item'
+                        itemAdd.id = 'add'
+                        itemAdd.addEventListener('click', addItem)
+                        buttonsDiv.innerHTML = ''
+                        buttonsPar.append(itemAdd)
+                    }
+                })
                 inputName.remove()
-                let parent = document.getElementById('appendToMe')
-                let newChild = document.createElement('div')
-                newChild.id = 'newChild'
-                let itemName = document.createElement('div')
-                itemName.innerHTML = value
-                let itemCount = document.createElement('div')
-                itemCount.innerHTML = 0
-                let add = document.createElement('button')
-                add.innerHTML = '+'
-                add.addEventListener('click', function (add) {
-                    itemCount.innerHTML = (Number(itemCount.innerHTML) + 1)
-                })
-                let subtract = document.createElement('button')
-                subtract.innerHTML = '-'
-                subtract.addEventListener('click', function (subtract) {
-                    itemCount.innerHTML = (Number(itemCount.innerHTML) - 1)
-                })
-                newChild.append(itemName)
-                newChild.append(itemCount)
-                newChild.append(add)
-                newChild.append(subtract)
-                parent.append(newChild)
-                let buttonsPar = document.getElementById('buttons')
-                let itemAdd = document.createElement('button')
-                itemAdd.innerHTML = 'Add Item'
-                itemAdd.id = 'add'
-                itemAdd.addEventListener('click', addItem)
-                buttonsPar.append(itemAdd)
+                inputParent.append(newInput)
+                buttonsDiv.innerHTML = 'Input seconds'
             }
         })
         inputParent.append(inputName)
