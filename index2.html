@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Counter</title>
+</head>
+
+<style>
+    body {
+        background-color: rgb(28, 30, 36);
+        color: white;
+    }
+
+    #buttons {
+        display: flex;
+        justify-content: center;
+        margin: 20px;
+    }
+
+    .appendToMe {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 50px;
+    }
+
+    #appendToMe {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 10px;
+    }
+
+    #newChild {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        margin: 10px;
+        gap: 5px;
+    }
+
+    #inputParent {
+        display: flex;
+        justify-content: center;
+    }
+
+    button {
+        background-color: rgb(28, 30, 36);
+        color: white;
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    #sessionInfo {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-top: 50px;
+    }
+
+    #timer {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-top: 50px;
+    }
+
+</style>
+<body>
+
+    <div id="buttons">
+        <button id="add">Add Item</button>
+    </div>
+
+    <div id="inputParent">
+    </div>
+
+    <div id='appendToMe'>
+    </div>
+
+    <div id='sessionInfo'>
+        <div id="time"></div>
+        <div id="cash"></div>
+    </div>
+
+    <div id="timer">
+        <button id="stopwatch">Start timer</button>
+        <div id="timerTrack">You have worked for 0 seconds, which is also 0 minutes.</div>
+    </div>
+    
+</body>
+
+<script>
+    let add = document.getElementById('add')
+
+    let sessionInfo = []
+
+    let startBtn = document.getElementById('stopwatch')
+    let timerTrack = document.getElementById('timerTrack')
+    let count = 0
+    let stopped = true
+    let repeat = null
+
+    startBtn.addEventListener('click', function (timer) {
+        console.log(stopped)
+        if (stopped == true) {
+            stopped = false
+            startBtn.innerHTML = 'Stop timer'
+            repeat = setInterval(function () {
+                count += 1;
+                timerTrack.innerHTML = `You have worked for ${count} seconds, which is also ${(count / 60).toFixed(1)} minutes.`;
+            }, 1000)
+        } else if (stopped == false) {
+            clearInterval(repeat)
+            repeat = null
+            startBtn.innerHTML = 'Start timer'
+            stopped = true
+        }
+    })
+
+    function addItem() {
+        let buttonsDiv = document.getElementById('buttons')
+        let initialButton = document.getElementById('add')
+        initialButton.remove()
+        buttonsDiv.innerHTML = 'Input an item name.'
+        let inputParent = document.getElementById('inputParent')
+        let inputName = document.createElement('input')
+        let value1
+        let value2
+        inputName.id = 'input'
+        inputName.addEventListener('keypress', function (press) {
+            if (press.key === 'Enter') {
+                value1 = inputName.value
+                let newInput = document.createElement('input')
+                newInput.id = 'input'
+                newInput.addEventListener('keypress', function (press) {
+                    if (press.key === 'Enter') {
+                        value2 = newInput.value
+                        let parent = document.getElementById('appendToMe')
+                        let newChild = document.createElement('div')
+                        newChild.id = 'newChild'
+                        let itemName = document.createElement('div')
+                        itemName.innerHTML = value1
+                        let itemCount = document.createElement('div')
+                        itemCount.innerHTML = 0
+                        let add = document.createElement('button')
+                        add.innerHTML = '+'
+                        add.addEventListener('click', function (add) {
+                            itemCount.innerHTML = (Number(itemCount.innerHTML) + 1)
+                            if (sessionInfo.indexOf(value1) == -1) {
+                                value1 = {
+                                    'count': Number(itemCount.innerHTML),
+                                    'seconds': Number(value2)
+                                }
+                                sessionInfo.push(value1)
+                            } else if (sessionInfo.indexOf(value1) != -1) {
+                                sessionInfo[sessionInfo.indexOf(value1)]['count'] = Number(itemCount.innerHTML)
+                            }
+                            let timeDiv = document.getElementById('time')
+                            let cashDiv = document.getElementById('cash')
+                            let seconds = 0
+                            let minutes = 0
+                            let cash = 0
+                            for (let i = 0; i < sessionInfo.length; i++) {
+                                let thisTask = sessionInfo[i]
+                                console.log(thisTask)
+                                seconds += (thisTask['seconds'] * thisTask['count'])
+                                minutes = (seconds / 60).toFixed(2)
+                                cash = (seconds / 300).toFixed(2)
+                            }
+                            timeDiv.innerHTML = `You have worked for ${seconds} seconds / ${minutes} minutes.`
+                            cashDiv.innerHTML = `Your current earnings for this session is $${cash} USD.`
+                        })
+                        let subtract = document.createElement('button')
+                        subtract.innerHTML = '-'
+                        subtract.addEventListener('click', function (subtract) {
+                            itemCount.innerHTML = (Number(itemCount.innerHTML) - 1)
+                        })
+                        newChild.append(itemName, itemCount, add, subtract)
+                        parent.append(newChild)
+                        newInput.remove()
+                        let buttonsPar = document.getElementById('buttons')
+                        let itemAdd = document.createElement('button')
+                        itemAdd.innerHTML = 'Add Item'
+                        itemAdd.id = 'add'
+                        itemAdd.addEventListener('click', addItem)
+                        buttonsDiv.innerHTML = ''
+                        buttonsPar.append(itemAdd)
+                    }
+                })
+                inputName.remove()
+                inputParent.append(newInput)
+                buttonsDiv.innerHTML = 'Input seconds'
+            }
+        })
+        inputParent.append(inputName)
+    }
+
+    add.addEventListener('click', addItem);
+</script>
+
+</html>

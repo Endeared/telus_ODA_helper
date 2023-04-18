@@ -1,22 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Counter</title>
+    <title>TELUS - ODA Helper</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dongle&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="https://i.imgur.com/oZOmoL1.png">
 </head>
 
 <style>
     body {
         background-color: rgb(28, 30, 36);
         color: white;
+        font-family: 'Helvetica Neue', Helvetica;
+        font-size: 24px;
     }
 
     #buttons {
         display: flex;
         justify-content: center;
         margin: 20px;
+        flex-direction: column;
+        align-items: center;
     }
 
     .appendToMe {
@@ -50,12 +59,23 @@
     }
 
     button {
-        background-color: rgb(28, 30, 36);
+        background-color: rgb(63, 65, 73);
         color: white;
         padding-left: 20px;
         padding-right: 20px;
         padding-top: 10px;
         padding-bottom: 10px;
+        font-family: 'Dongle', sans-serif;
+        font-size: 18px;
+        border: none;
+        box-shadow: 0px 5px 5px black;
+        border-radius: 30px;
+        transition: 0.2s ease-out;
+    }
+
+    button:hover {
+        transform: scale(1.25);
+        transition: 0.2s ease-out;
     }
 
     #sessionInfo {
@@ -67,11 +87,184 @@
         margin-top: 50px;
     }
 
+    #timer {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-top: 50px;
+    }
+
+    #add,
+    #stopwatch {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 40px;
+        padding-right: 40px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    .topCont {
+        margin-bottom: 15px;
+    }
+
+    #title {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        font-size: 48px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #footer {
+        position: sticky;
+        bottom: 0;
+        text-align: center;
+        font-size: 12px;
+        letter-spacing: 1.5px;
+        width: 100%;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #details {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 50%;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .column {
+        display: flex;
+        flex-direction: column;
+        flex-basis: 100%;
+        flex: 1;
+        margin: 10px;
+        height: 100%;
+    }
+
+    .mainCont {
+        display: flex;
+        justify-content: center;
+    }
+
+    .object {
+        border: 1px solid grey;
+        border-radius: 5px;
+        height: 100px;
+        background-color: rgb(63, 65, 73);
+        margin-top: 20px;
+    }
+
+    #logo {
+        width: 500px;
+        height: auto;
+    }
+
+    #titleText,
+    #logo {
+        margin: 0;
+        padding: 0;
+    }
+
+    #titleText {
+        display: flex;
+    }
+
+    #telus {
+        letter-spacing: 7px;
+        font-weight: 700;
+    }
+
+    #odaHelper {
+        letter-spacing: -1px;
+        font-weight: 300;
+        font-family: 'Helvetica Neue', 'Helvetica';
+        src: url(helveticaneue-ultrathin.woff);
+    }
+
+    #title {
+        margin-bottom: 50px;
+    }
+
+    #cash,
+    #timerTrack, #hourly {
+        font-size: 14px;
+    }
+
+    #input,
+    #firstInput {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-left: 30px;
+        padding-right: 30px;
+        text-align: center;
+    }
+
+    #newChild {
+        display: flex;
+        gap: 100px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 50%;
+    }
+
+    #itemName, #itemCount, #addSubCount {
+        flex-grow: 1;
+        width: 15%;
+    }
+
+    #itemCount {
+        text-align: right;
+    }
+
+    #itemName, #itemCount {
+        font-size: 16px;
+    }
+
+    #addSubCont * {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-left: 30px;
+        padding-right: 30px;
+        margin: 0;
+    }
+
+    #addSubCont {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+    }
+
+
 </style>
+
 <body>
 
+    <div id="title">
+        <img id='logo'
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Telus_International_logo.svg/1280px-Telus_International_logo.svg.png">
+        <div id="titleText">
+            <div id="telus">TELUS</div>
+            <div id="odaHelper">&nbspODA Helper</div>
+        </div>
+    </div>
+
     <div id="buttons">
-        <button id="add">Add Item</button>
+        <div class="topCont">
+            <button id="add">Add Item</button>
+            <button id="stopwatch">Start Timer</button>
+        </div>
     </div>
 
     <div id="inputParent">
@@ -80,25 +273,82 @@
     <div id='appendToMe'>
     </div>
 
-    <div id='sessionInfo'>
-        <div id="time"></div>
-        <div id="cash"></div>
+    <div class="mainCont">
+        <div id="details">
+            <div class="column">
+                <div id='sessionInfo' class="object">
+                    <div id="cash">You have not earned any wages this session.</div>
+                    <div id="hourly">Your current hourly wage is $0.00.</div>
+                </div>
+            </div>
+
+            <div class="column">
+                <div id="timer" class="object">
+                    <div id="timerTrack">You have worked for 0 seconds, which is also 0 minutes.</div>
+                </div>
+            </div>
+        </div>
     </div>
-    
+
+
+
+    <footer id="footer">
+        <div id="text">
+            Built by Ross Hamey. 2023.
+        </div>
+    </footer>
+
 </body>
 
 <script>
     let add = document.getElementById('add')
 
     let sessionInfo = []
+    let cashTotal = 0
+
+    let startBtn = document.getElementById('stopwatch')
+    let timerTrack = document.getElementById('timerTrack')
+    let count = 0
+    let stopped = true
+    let repeat = null
+
+
+    function timer() {
+        let startBtn = document.getElementById('stopwatch')
+        let hourlyDiv = document.getElementById('hourly')
+        if (stopped == true) {
+            stopped = false
+            startBtn.innerHTML = 'Stop timer'
+            repeat = setInterval(function () {
+                count += 1;
+                timerTrack.innerHTML = `You have worked for ${count} seconds, which is also ${(count / 60).toFixed(1)} minutes.`;
+                let total = 0
+                if (count % 60 == 0) {
+                    for (let i = 0; i < sessionInfo.length; i++) {
+                        let seconds = sessionInfo[i]['seconds']
+                        let count = sessionInfo[i]['count']
+                        let cash = (seconds * count) / 300
+                        total += cash
+                    }
+                    hourlyDiv.innerHTML = `Your current hourly wage is $${(Number(total) / (count / 3600)).toFixed(2)}.`
+                }
+            }, 1000)
+        } else if (stopped == false) {
+            clearInterval(repeat)
+            repeat = null
+            startBtn.innerHTML = 'Start timer'
+            stopped = true
+        }
+    }
 
     function addItem() {
         let buttonsDiv = document.getElementById('buttons')
         let initialButton = document.getElementById('add')
         initialButton.remove()
-        buttonsDiv.innerHTML = 'Input an item name.'
+        buttonsDiv.innerHTML = 'Input a task name.'
         let inputParent = document.getElementById('inputParent')
         let inputName = document.createElement('input')
+        inputName.id = 'firstInput'
         let value1
         let value2
         inputName.id = 'input'
@@ -110,67 +360,102 @@
                 newInput.addEventListener('keypress', function (press) {
                     if (press.key === 'Enter') {
                         value2 = newInput.value
+                        let taskName = `[${value2}s] ${value1}`
                         let parent = document.getElementById('appendToMe')
                         let newChild = document.createElement('div')
                         newChild.id = 'newChild'
                         let itemName = document.createElement('div')
-                        itemName.innerHTML = value1
+                        itemName.innerHTML = taskName
+                        itemName.id = 'itemName'
                         let itemCount = document.createElement('div')
-                        itemCount.innerHTML = 0
+                        itemCount.innerHTML = 0 + ' completions'
+                        itemCount.id = 'itemCount'
+                        let addSubCont = document.createElement('div')
+                        addSubCont.id = 'addSubCont'
                         let add = document.createElement('button')
+                        let taskNameCopy = taskName
                         add.innerHTML = '+'
                         add.addEventListener('click', function (add) {
-                            itemCount.innerHTML = (Number(itemCount.innerHTML) + 1)
-                            if (sessionInfo.indexOf(value1) == -1) {
-                                value1 = {
-                                    'count': Number(itemCount.innerHTML),
+                            let split = (itemCount.innerHTML).split(' ')
+                            let newCount = Number(split[0]) + 1
+                            itemCount.innerHTML = (newCount) + ' completions'
+                            if (sessionInfo.indexOf(taskNameCopy) == -1) {
+                                taskNameCopy = {
+                                    'count': newCount,
                                     'seconds': Number(value2)
                                 }
-                                sessionInfo.push(value1)
-                            } else if (sessionInfo.indexOf(value1) != -1) {
-                                sessionInfo[sessionInfo.indexOf(value1)]['count'] = Number(itemCount.innerHTML)
+                                sessionInfo.push(taskNameCopy)
+                            } else if (sessionInfo.indexOf(taskNameCopy) != -1) {
+                                sessionInfo[sessionInfo.indexOf(taskNameCopy)]['count'] = newCount
                             }
-                            let timeDiv = document.getElementById('time')
                             let cashDiv = document.getElementById('cash')
                             let seconds = 0
                             let minutes = 0
                             let cash = 0
+                            let secondTotal = 0
                             for (let i = 0; i < sessionInfo.length; i++) {
                                 let thisTask = sessionInfo[i]
-                                console.log(thisTask)
-                                seconds += (thisTask['seconds'] * thisTask['count'])
+                                seconds = (thisTask['seconds'] * thisTask['count'])
                                 minutes = (seconds / 60).toFixed(2)
                                 cash = (seconds / 300).toFixed(2)
+                                secondTotal += Number(cash)
                             }
-                            timeDiv.innerHTML = `You have worked for ${seconds} seconds / ${minutes} minutes.`
-                            cashDiv.innerHTML = `Your current earnings for this session is $${cash} USD.`
+                            cashDiv.innerHTML = `Your current earnings for this session is $${Number(secondTotal).toFixed(2)} USD.`
                         })
                         let subtract = document.createElement('button')
                         subtract.innerHTML = '-'
                         subtract.addEventListener('click', function (subtract) {
-                            itemCount.innerHTML = (Number(itemCount.innerHTML) - 1)
+                            let split = (itemCount.innerHTML).split(' ')
+                            let newCount = Number(split[0]) - 1
+                            let cashDiv = document.getElementById('cash')
+                            let seconds = sessionInfo[sessionInfo.indexOf(taskNameCopy)]['seconds']
+                            let count = newCount
+                            let cash = Number(seconds * newCount) / 300
+                            if (newCount >= 0) {
+                                itemCount.innerHTML = newCount + ' completions'
+                                let index = sessionInfo.indexOf(taskNameCopy)
+                                sessionInfo[index]['count'] = newCount
+                            } else if (newCount < 0) {
+                                itemCount.innerHTML = 0 + ' completions'
+                                sessionInfo[index]['count'] = 0 
+                            }
+                            cashDiv.innerHTML = `Your current earnings for this session is $${cash.toFixed(2)} USD.`
                         })
-                        newChild.append(itemName, itemCount, add, subtract)
+                        addSubCont.append(add, subtract)
+                        newChild.append(itemName, addSubCont,  itemCount) 
                         parent.append(newChild)
                         newInput.remove()
                         let buttonsPar = document.getElementById('buttons')
                         let itemAdd = document.createElement('button')
+                        let startTimer = document.createElement('button')
+                        let topCont = document.createElement('div')
+                        topCont.id = 'topCont'
                         itemAdd.innerHTML = 'Add Item'
                         itemAdd.id = 'add'
                         itemAdd.addEventListener('click', addItem)
+                        if (stopped == true) {
+                            startTimer.innerHTML = 'Start timer'
+                        } else if (stopped == false) {
+                            startTimer.innerHTML = 'Stop timer'
+                        }
+                        startTimer.id = 'stopwatch'
+                        startTimer.addEventListener('click', timer)
                         buttonsDiv.innerHTML = ''
-                        buttonsPar.append(itemAdd)
+                        topCont.append(itemAdd)
+                        topCont.append(startTimer)
+                        buttonsPar.append(topCont)
                     }
                 })
                 inputName.remove()
                 inputParent.append(newInput)
-                buttonsDiv.innerHTML = 'Input seconds'
+                buttonsDiv.innerHTML = 'Input the task seconds.'
             }
         })
         inputParent.append(inputName)
     }
 
     add.addEventListener('click', addItem);
+    startBtn.addEventListener('click', timer)
 </script>
 
 </html>
